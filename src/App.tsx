@@ -44,6 +44,7 @@ type StoredState = {
 }
 
 const STORAGE_KEY = 'moneyguard-data-v1'
+const WEEKLY_WARNING_RATE = 0.8
 const categories: Category[] = ['日常雑費', '趣味・推し活', '外食', 'その他']
 const categoryColors: Record<Category, string> = {
   '日常雑費': '#2E5A44',
@@ -181,6 +182,8 @@ function App() {
 
   const currentWeek = getWeekIdentifier(new Date(now))
   const weeklyRemaining = data.weekly_limit - data.weekly_spent_amount
+  const weeklyUsageRate = data.weekly_spent_amount / Math.max(data.weekly_limit, 1)
+  const shouldShowWeeklyWarning = data.weekly_spent_amount > 0 && weeklyUsageRate >= WEEKLY_WARNING_RATE
   const purchaseThresholds = getPurchaseThresholds(data.settings.allowance_amount)
   const currentMonthSpent = useMemo(
     () => data.transactions.reduce((sum, item) => sum + item.amount, 0),
@@ -260,10 +263,10 @@ function App() {
   }, [data.pending_list, now])
 
   useEffect(() => {
-    if (!data.weekly_charged_flag || weeklyRemaining <= 0) {
+    if (shouldShowWeeklyWarning) {
       setShowStartupWarning(true)
     }
-  }, [data.weekly_charged_flag, weeklyRemaining])
+  }, [shouldShowWeeklyWarning])
 
   const handleSaveTransaction = (transaction: Transaction) => {
     setData((current) => ({
