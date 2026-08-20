@@ -61,23 +61,10 @@ const defaultState: StoredState = {
     system_threshold_daily: 1000,
     system_threshold_hobby: 3000,
   },
-  weekly_spent_amount: 750,
+  weekly_spent_amount: 0,
   weekly_charged_flag: true,
-  transactions: [
-    { id: 'tx_1', date: '2026-08-20T12:30:00', amount: 250, category: '日常雑費', item_name: 'おにぎり', purchase_place: 'ファミマ' },
-    { id: 'tx_2', date: '2026-08-19T18:00:00', amount: 1800, category: '趣味・推し活', item_name: 'マンガ本', purchase_place: '書店' },
-  ],
-  pending_list: [
-    {
-      id: 'pd_1',
-      created_at: '2026-08-20T18:00:00',
-      amount: 1500,
-      category: '趣味・推し活',
-      item_name: 'マンガ本',
-      purchase_place: '書店',
-      expire_at: '2026-08-21T18:00:00',
-    },
-  ],
+  transactions: [],
+  pending_list: [],
 }
 
 const defaultForm = {
@@ -456,7 +443,7 @@ function App() {
           }}
         >
           <div className="donut-center">
-            <span>今週の残リミット</span>
+            <span>今週のリミット</span>
             <strong>{formatCurrency(Math.max(weeklyRemaining, 0))}</strong>
           </div>
         </div>
