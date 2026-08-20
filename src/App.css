@@ -1,3 +1,38 @@
+.desktop-redirect {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #f9f9f6;
+  color: #000000;
+}
+
+.desktop-redirect-panel {
+  width: min(440px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  border: 2px solid #000000;
+  background: #ffffff;
+  padding: 28px;
+  text-align: center;
+}
+
+.desktop-redirect-panel h1 {
+  font-size: 2rem;
+}
+
+.desktop-redirect-panel p {
+  font-weight: 700;
+}
+
+.desktop-redirect-panel img {
+  display: block;
+  width: min(280px, 80vw);
+  height: auto;
+  border: 2px solid #000000;
+}
+
 .moneyguard-app {
   width: min(980px, calc(100vw - 24px));
   margin: 0 auto;

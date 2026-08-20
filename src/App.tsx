@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { getBudgetStatus, getPurchaseThresholds, shouldWarnOnPurchase } from './logic'
+import qrCode from './assets/QR.png'
 
 type TabName = 'month' | 'week' | 'settings'
 type Category = '日常雑費' | '趣味・推し活' | '外食' | 'その他'
@@ -132,7 +133,15 @@ const sendNotification = (title: string, body: string) => {
   new Notification(title, { body })
 }
 
+const detectMobileDevice = () => {
+  const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+  const narrowViewport = window.matchMedia('(max-width: 700px)').matches
+  const touchDevice = navigator.maxTouchPoints > 0
+  return mobileUserAgent || (narrowViewport && touchDevice)
+}
+
 function App() {
+  const [isMobileDevice, setIsMobileDevice] = useState(detectMobileDevice)
   const [tab, setTab] = useState<TabName>('week')
   const [data, setData] = useState<StoredState>(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
@@ -158,6 +167,12 @@ function App() {
   const [pendingDraft, setPendingDraft] = useState<Transaction | null>(null)
   const [now, setNow] = useState(Date.now())
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    const updateDeviceType = () => setIsMobileDevice(detectMobileDevice())
+    window.addEventListener('resize', updateDeviceType)
+    return () => window.removeEventListener('resize', updateDeviceType)
+  }, [])
 
   const resetLocalStorage = () => {
     if (!window.confirm('保存されている支出データを初期状態に戻しますか？')) return
@@ -544,6 +559,18 @@ function App() {
       <button type="button" className="reset-button" onClick={resetLocalStorage}>保存データをリセット</button>
     </div>
   )
+
+  if (!isMobileDevice) {
+    return (
+      <main className="desktop-redirect">
+        <section className="desktop-redirect-panel">
+          <h1>MoneyGuard</h1>
+          <p>スマホでサイトを閲覧してください。</p>
+          <img src={qrCode} alt="スマホでMoneyGuardを開くためのQRコード" />
+        </section>
+      </main>
+    )
+  }
 
   return (
     <div className="moneyguard-app">
