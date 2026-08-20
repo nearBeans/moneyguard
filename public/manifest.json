@@ -1,0 +1,17 @@
+{
+  "name": "MoneyGuard",
+  "short_name": "MoneyGuard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9f9f6",
+  "theme_color": "#000000",
+  "description": "支出管理アプリ",
+  "icons": [
+    {
+      "src": "/moneyguard.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
